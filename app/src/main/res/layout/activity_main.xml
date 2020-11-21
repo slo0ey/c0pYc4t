@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/app_layout"
+    tools:context=".ui.MainActivity"
+    tools:ignore="all">
+
+    <TextView
+        android:id="@+id/appTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_centerHorizontal="true"
+        android:text="/c0pYc4t/"
+        android:textColor="#000000"
+        android:textSize="72dp"
+        android:fontFamily="@font/dmserifdisplay" />
+
+    <EditText
+        android:id="@+id/idInput"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:background="#00000000"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/appTitle"
+        android:layout_alignStart="@id/appTitle"
+        android:hint="LevelID here"
+        android:fontFamily="@font/dmserifdisplay"
+        android:inputType="number">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/c0py"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:background="#00000000"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="80dp"
+        android:layout_below="@id/appTitle"
+        android:layout_alignEnd="@id/appTitle"
+        android:text="copy"
+        android:textColor="#000000"
+        android:textSize="24dp"
+        android:fontFamily="@font/dmserifdisplay"
+        android:textAllCaps="false">
+
+    </Button>
+
+    <TextView
+        android:id="@+id/app_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="v1.0.0 "
+        android:textSize="24dp"
+        android:textColor="#000000"
+        android:fontFamily="@font/dmserifdisplay">
+
+    </TextView>
+
+    <ImageButton
+        android:id="@+id/mlg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+    </ImageButton>
+
+</RelativeLayout>
