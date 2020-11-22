@@ -1,11 +1,13 @@
 package com.acceler8tion.c0pyc4t.ui
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.text.style.URLSpan
 import android.util.Base64
 import android.view.View
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var appTitle: TextView
     private lateinit var idInput: EditText
     private lateinit var c0py: Button
+    private lateinit var notice: TextView
     private lateinit var mlg: ImageButton
     private lateinit var appVersion: TextView
     private lateinit var job: Job
@@ -67,6 +70,13 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             }
         })
 
+        val text = "If you want to relogin, here"
+        val string = SpannableString(text)
+        val index = text.indexOf("here")
+        string.setSpan(CustomClickableSpan(), index, index+4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        notice.text = string
+        notice.movementMethod = LinkMovementMethod.getInstance()
+
         val text2 = getString(R.string.app_version)
         val string2 = SpannableString(text2)
         string2.setSpan(URLSpan("https://www.github.com/acceler8tion/c0pYc4t"), 0, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -97,7 +107,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                             if(it2 == null) {
                                 showToast("Failed to upload level", Toast.LENGTH_SHORT)
                             } else {
-                                showToast("Upload successfully! ID: $it", Toast.LENGTH_LONG)
+                                showToast("Upload successfully! Check your level list", Toast.LENGTH_LONG)
                             }
                         }
                     }
@@ -131,11 +141,26 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         appTitle = findViewById(R.id.appTitle)
         idInput = findViewById(R.id.idInput)
         c0py = findViewById(R.id.c0py)
+        notice = findViewById(R.id.notice)
         mlg = findViewById(R.id.mlg)
         appVersion = findViewById(R.id.app_version)
     }
 
     private fun showToast(text: String, length: Int) {
         Toast.makeText(this, text, length).show()
+    }
+
+    inner class CustomClickableSpan : ClickableSpan() {
+        /**
+         * Performs the click action associated with this span.
+         */
+        override fun onClick(widget: View) {
+            pref.edit()
+                    .putBoolean("login", false)
+                    .apply()
+            val intent = Intent(this@MainActivity, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

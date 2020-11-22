@@ -51,6 +51,18 @@
     </Button>
 
     <TextView
+        android:id="@+id/notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/c0py"
+        android:text=""
+        android:textColor="@color/black">
+
+    </TextView>
+
+    <TextView
         android:id="@+id/app_version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
