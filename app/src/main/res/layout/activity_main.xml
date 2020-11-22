@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/app_layout"
+    android:background="#FFFFFF"
     tools:context=".ui.MainActivity"
     tools:ignore="all">
 
@@ -28,7 +29,8 @@
         android:layout_below="@id/appTitle"
         android:layout_alignStart="@id/appTitle"
         android:hint="LevelID here"
-        android:fontFamily="@font/dmserifdisplay"
+        android:textColor="@color/black"
+        android:textColorHint="#D8D8D8"
         android:inputType="number">
 
     </EditText>
@@ -44,8 +46,6 @@
         android:layout_alignEnd="@id/appTitle"
         android:text="copy"
         android:textColor="#000000"
-        android:textSize="24dp"
-        android:fontFamily="@font/dmserifdisplay"
         android:textAllCaps="false">
 
     </Button>

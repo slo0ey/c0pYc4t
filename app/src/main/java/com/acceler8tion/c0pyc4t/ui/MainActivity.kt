@@ -1,81 +1,129 @@
 package com.acceler8tion.c0pyc4t.ui
 
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
+import android.util.Base64
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.preference.PreferenceManager
 import com.acceler8tion.c0pyc4t.R
 import com.acceler8tion.c0pyc4t.data.Utils
-import com.acceler8tion.c0pyc4t.data.viewmodel.ViewModel
+import com.acceler8tion.c0pyc4t.data.viewmodel.APIViewModel
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity(), CoroutineScope {
 
-    private val repository = ViewModel()
     private lateinit var mainLayout: RelativeLayout
     private lateinit var appTitle: TextView
     private lateinit var idInput: EditText
     private lateinit var c0py: Button
     private lateinit var mlg: ImageButton
+    private lateinit var appVersion: TextView
     private lateinit var job: Job
 
     override val coroutineContext: CoroutineContext
-        get() = job + Dispatchers.IO
+        get() = job + Dispatchers.Main
 
-    companion object {
-        @JvmStatic
-        private var isDownload = false
-    }
+    private lateinit var pref: SharedPreferences
+    private lateinit var viewModel: APIViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
 
+        viewModel = ViewModelProvider(this)
+                        .get(APIViewModel::class.java)
         job = SupervisorJob()
+        pref = PreferenceManager.getDefaultSharedPreferences(this)
 
-        Glide.with(this)
-            .load(R.drawable.mlg)
-            .asGif()
-            .error(R.drawable.ic_mlg_load_fail)
-            .into(mlg)
+        launch {
+            Glide.with(this@MainActivity)
+                .load(R.drawable.mlg)
+                .asGif()
+                .error(R.drawable.ic_mlg_load_fail)
+                .into(mlg)
+        }
 
         c0py.setOnClickListener(View.OnClickListener {
-            /*val id = idInput.text.toString()
-            if (id.isEmpty() || id.toIntOrNull() == null) {
-                Toast.makeText(this, "$id must be number!", Toast.LENGTH_SHORT).show()
-            } else {
-                isDownload = true;
-                launch {
-
-                }
-            }*/
-            val string = idInput.text.toString()
-            idInput.setText(Utils.chk(Utils.seed(string)))
+            launch {
+                doCopy()
+            }
         })
 
         mlg.setOnClickListener(View.OnClickListener {
-            launch(Dispatchers.Main) {
-                repeat(30) {
-                    val r2 = String.format(
-                        "%02X",
-                        (Math.random() * 255).toInt()
-                    )
-                    val g2 = String.format(
-                        "%02X",
-                        (Math.random() * 255).toInt()
-                    )
-                    val b2 = String.format(
-                        "%02X",
-                        (Math.random() * 255).toInt()
-                    )
-                    mainLayout.setBackgroundColor(Color.parseColor("#$r2$g2$b2"))
-                }
+            launch {
+                doMlg()
             }
         })
+
+        val text2 = getString(R.string.app_version)
+        val string2 = SpannableString(text2)
+        string2.setSpan(URLSpan("https://www.github.com/acceler8tion/c0pYc4t"), 0, 6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        appVersion.text = string2
+        appVersion.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    private suspend fun doCopy() {
+        val id = idInput.text.toString()
+        if (id.isEmpty() || id.toIntOrNull() == null) {
+            showToast("$id must be number!", Toast.LENGTH_SHORT)
+        } else {
+            showToast("Downloading $id...", Toast.LENGTH_LONG)
+            viewModel.getLevel(id).collect {
+                if (it == null) {
+                    showToast("Failed to download level", Toast.LENGTH_SHORT)
+                } else {
+                    showToast("Analyzing param...", Toast.LENGTH_LONG)
+                    val level = Utils.parseToMap(it, ":")
+                    val gjp = Base64.encodeToString(Utils.xor(pref.getString("gjp", "")!!, "37526").toByteArray(), Base64.DEFAULT)
+                    viewModel.uploadLevel(
+                            id,
+                            pref.getString("accountID", "")!!,
+                            gjp,
+                            pref.getString("userName", "")!!,
+                            level
+                    ).collect {it2 -> run {
+                            if(it2 == null) {
+                                showToast("Failed to upload level", Toast.LENGTH_SHORT)
+                            } else {
+                                showToast("Upload successfully! ID: $it", Toast.LENGTH_LONG)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun doMlg() {
+        repeat(100) {
+            val r2 = String.format(
+                    "%02X",
+                    (Math.random() * 255).toInt()
+            )
+            val g2 = String.format(
+                    "%02X",
+                    (Math.random() * 255).toInt()
+            )
+            val b2 = String.format(
+                    "%02X",
+                    (Math.random() * 255).toInt()
+            )
+            mainLayout.setBackgroundColor(Color.parseColor("#$r2$g2$b2"))
+            delay(50L)
+        }
+        mainLayout.setBackgroundColor(Color.WHITE)
     }
 
     private fun initView() {
@@ -84,5 +132,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         idInput = findViewById(R.id.idInput)
         c0py = findViewById(R.id.c0py)
         mlg = findViewById(R.id.mlg)
+        appVersion = findViewById(R.id.app_version)
+    }
+
+    private fun showToast(text: String, length: Int) {
+        Toast.makeText(this, text, length).show()
     }
 }

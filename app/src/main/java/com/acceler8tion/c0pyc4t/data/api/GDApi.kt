@@ -9,7 +9,7 @@ import java.io.IOException
 class GDApi {
     companion object {
         private const val baseUrl = "http://www.boomlings.com/database"
-        private fun baseParam(): MutableMap<String, String> = mutableMapOf<String, String>(
+        private fun baseParam(): MutableMap<String, String> = mutableMapOf (
             "gameVersion" to "21",
             "binaryVersion" to "35",
             "gdw" to "0",
@@ -22,15 +22,19 @@ class GDApi {
         param["levelID"] = id
         param["inc"] = "0"
         param["extras"] = "1"
+        param["secret"] = "Wmfd2893gb7"
 
         return try {
-            Jsoup.connect("$baseUrl/downloadGJLevel22.php")
+            val result = Jsoup.connect("$baseUrl/downloadGJLevel22.php")
                 .ignoreContentType(true)
                 .method(Connection.Method.POST)
                 .maxBodySize(0)
                 .requestBody(Utils.generateParam(param.toMap()))
                 .execute().body()
+            println(result)
+            if(result == "-1") null else result
         } catch (e: IOException) {
+            println(e.message!!)
             null
         }
     }
@@ -75,12 +79,34 @@ class GDApi {
         param["levelInfo"] = Utils.getOrElse(levelData["26"], "") //pls never
 
         return try {
-            Jsoup.connect("$baseUrl/uploadGJLevel21.php")
+            val result = Jsoup.connect("$baseUrl/uploadGJLevel21.php")
                     .ignoreContentType(true)
                     .method(Connection.Method.POST)
-                    .maxBodySize(0)
                     .requestBody(Utils.generateParam(param.toMap()))
                     .execute().body()
+            println(result)
+            if(result == "-1") null else levelName
+        } catch (e: IOException) {
+            null
+        }
+    }
+
+    fun login(userName: String, password: String, udid: String): String? {
+        val param = baseParam()
+        param["userName"] = userName
+        param["password"] = password
+        param["udid"] = udid
+        param["secret"] = "Wmfv3899gc9"
+
+        return try {
+            val result = Jsoup.connect("$baseUrl/accounts/loginGJAccount.php")
+                .ignoreContentType(true)
+                .method(Connection.Method.POST)
+                .maxBodySize(0)
+                .requestBody(Utils.generateParam(param.toMap()))
+                .execute().body()
+            println("Result: $result")
+            if(result == "-1" || result == "-2") null else result
         } catch (e: IOException) {
             null
         }

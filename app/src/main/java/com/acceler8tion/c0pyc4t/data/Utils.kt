@@ -1,11 +1,8 @@
 package com.acceler8tion.c0pyc4t.data
 
-import org.apache.commons.codec.binary.Base64
+import android.util.Base64
 import java.security.MessageDigest
-import java.security.NoSuchAlgorithmException
 import java.util.*
-import kotlin.experimental.xor
-
 
 class Utils {
     companion object {
@@ -28,7 +25,10 @@ class Utils {
         }
 
         fun <T> getOrElse(obj: T?, replacer: T): T{
-            return obj?:replacer
+            return if(obj != null && obj is String) {
+                if(obj.isEmpty()) replacer
+                else obj
+            } else obj?:replacer
         }
 
         fun rs(): String {
@@ -48,8 +48,8 @@ class Utils {
         fun chk(value: String): String? {
             val salt = "xI25fpAapCQg"
             val sha = sha1(value.plus(salt))
-            val xorstr = xor(sha.toLowerCase(Locale.getDefault()))
-            return Base64.encodeBase64String(xorstr.toByteArray()) ?: null
+            val xorstr = xor(sha.toLowerCase(Locale.getDefault()), "41274")
+            return Base64.encodeToString(xorstr.toByteArray(), Base64.DEFAULT)
         }
 
         private fun sha1(input: String): String {
@@ -67,13 +67,13 @@ class Utils {
             return result.toString()
         }
 
-        private fun xor(input: String): String {
-            val key = "41274".toByteArray() //Can be any chars, and any length array
+        fun xor(input: String, key: String): String {
+            val ks = key.toByteArray() //Can be any chars, and any length array
             val output = StringBuilder()
 
             for (i in input.indices) {
                 val a: Int = input[i].toInt()
-                val b: Int = key[i % key.size].toInt()
+                val b: Int = ks[i % ks.size].toInt()
                 output.append((a xor b).toChar())
             }
 
