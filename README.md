@@ -16,6 +16,10 @@
 
 Issue, Pull Request is always welcome :)
 
+# How does it work?
+
+[here](https://github.com/acceler8tion/c0pYc4t/HOW-DOES-IT-WORK.md)
+
 # Latest Version
 
 **[v1.0.0](https://github.com/acceler8tion/c0pYc4t/releases/tag/v1.0.0)** <- download here

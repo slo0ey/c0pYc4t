@@ -16,6 +16,10 @@
 
 이슈, 풀리퀘 환영 :)
 
+# 어떻게 작동해?
+
+[읽어라](https://github.com/acceler8tion/c0pYc4t/HOW-DOES-IT-WORK.md)
+
 # 최신 버전
 
 **[v1.0.0](https://github.com/acceler8tion/c0pYc4t/releases/tag/v1.0.0)** <- download here
