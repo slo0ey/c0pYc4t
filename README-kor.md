@@ -22,7 +22,7 @@
 
 # 최신 버전
 
-**[v1.0.0](https://github.com/acceler8tion/c0pYc4t/releases/tag/v1.0.0)** <- download here
+**[v1.0.0](https://github.com/acceler8tion/c0pYc4t/releases/download/v1.0.0/c0pYc4t.apk)** <- download here
 
 # 기기 요구사항
 
