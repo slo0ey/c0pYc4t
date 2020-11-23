@@ -18,7 +18,7 @@
 
 # 어떻게 작동해?
 
-[읽어라](https://github.com/acceler8tion/c0pYc4t/HOW-DOES-IT-WORK.md)
+[읽어라](https://github.com/acceler8tion/c0pYc4t/blob/master/HOW-DOES-IT-WORK.md)
 
 # 최신 버전
 
