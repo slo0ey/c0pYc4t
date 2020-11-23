@@ -10,6 +10,8 @@
 
 **Geometry Dash Level** Clone App for `Android`
 
+한국어 설명은 [여기](https://github.com/acceler8tion/c0pYc4t/blob/master/README-kor.md)
+
 # Description
 
 *(No description provided)*
