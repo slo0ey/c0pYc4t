@@ -3,11 +3,14 @@ package com.acceler8tion.c0pyc4t.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.util.Base64
 import android.view.View
@@ -18,7 +21,6 @@ import androidx.preference.PreferenceManager
 import com.acceler8tion.c0pyc4t.R
 import com.acceler8tion.c0pyc4t.data.Utils
 import com.acceler8tion.c0pyc4t.data.viewmodel.APIViewModel
-import com.bumptech.glide.Glide
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import kotlin.coroutines.CoroutineContext
@@ -30,7 +32,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var idInput: EditText
     private lateinit var c0py: Button
     private lateinit var notice: TextView
-    private lateinit var mlg: ImageButton
     private lateinit var appVersion: TextView
     private lateinit var job: Job
 
@@ -50,29 +51,17 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         job = SupervisorJob()
         pref = PreferenceManager.getDefaultSharedPreferences(this)
 
-        launch {
-            Glide.with(this@MainActivity)
-                .load(R.drawable.mlg)
-                .asGif()
-                .error(R.drawable.ic_mlg_load_fail)
-                .into(mlg)
-        }
-
         c0py.setOnClickListener(View.OnClickListener {
             launch {
                 doCopy()
             }
         })
 
-        mlg.setOnClickListener(View.OnClickListener {
-            launch {
-                doMlg()
-            }
-        })
-
-        val text = "If you want to relogin, here"
+        val text = getString(R.string.notice2)
         val string = SpannableString(text)
         val index = text.indexOf("here")
+        string.setSpan(ForegroundColorSpan(Color.RED), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        string.setSpan(StyleSpan(Typeface.BOLD), 0, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         string.setSpan(CustomClickableSpan(), index, index+4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         notice.text = string
         notice.movementMethod = LinkMovementMethod.getInstance()
@@ -116,33 +105,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         }
     }
 
-    private suspend fun doMlg() {
-        repeat(100) {
-            val r2 = String.format(
-                    "%02X",
-                    (Math.random() * 255).toInt()
-            )
-            val g2 = String.format(
-                    "%02X",
-                    (Math.random() * 255).toInt()
-            )
-            val b2 = String.format(
-                    "%02X",
-                    (Math.random() * 255).toInt()
-            )
-            mainLayout.setBackgroundColor(Color.parseColor("#$r2$g2$b2"))
-            delay(50L)
-        }
-        mainLayout.setBackgroundColor(Color.WHITE)
-    }
-
     private fun initView() {
         mainLayout = findViewById(R.id.app_layout)
         appTitle = findViewById(R.id.appTitle)
         idInput = findViewById(R.id.idInput)
         c0py = findViewById(R.id.c0py)
         notice = findViewById(R.id.notice)
-        mlg = findViewById(R.id.mlg)
         appVersion = findViewById(R.id.app_version)
     }
 

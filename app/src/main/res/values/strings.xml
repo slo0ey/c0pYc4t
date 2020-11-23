@@ -11,4 +11,5 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="notice">● Your account is required for level upload.\n   It is not used for any other purposes.\n\n● If you do not know your accountID, visit here.\n   Then search your profile</string>
+    <string name="notice2">Notice! Do not attempt to copy too much at once.\nWe will not take any responsibility if you try excessive attempting.\n(Recommend to use 4~5 times a day.)\n\n● If you want to relogin, here</string>
 </resources>
